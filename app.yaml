@@ -1,0 +1,12 @@
+runtime: python
+env: flex
+entrypoint: uvicorn --host 0.0.0.0 --port ${PORT} qna:qna
+
+runtime_config:
+  python_version: 3
+
+manual_scaling:
+  instances: 1
+
+readiness_check:
+  path: "/healthcheck"
