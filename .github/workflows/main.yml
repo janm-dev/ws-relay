@@ -16,6 +16,5 @@ jobs:
         uses: google-github-actions/deploy-appengine@v0.4.0
         with:
           credentials: ${{ secrets.gcp_credentials }}
-          version: json
           promote: true
           working_directory: ${{ github.workspace }}/
