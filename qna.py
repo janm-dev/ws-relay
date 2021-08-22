@@ -2,6 +2,7 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Response
 from typing import Dict, List
 import asyncio
+import time
 
 
 class Room:
@@ -48,7 +49,8 @@ rooms: Dict[str, Dict[str, Room]] = {}
 # Health Check
 @qna.get("/healthcheck")
 async def handle_healthcheck():
-    return Response()
+    # Respond with the current time in milliseconds
+    return Response(f"OK {time.time_ns() // (1000 * 1000)}")
 
 
 # Message relaying
