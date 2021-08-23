@@ -41,7 +41,7 @@ class Room:
 
 
 # FastAPI setup
-qna = FastAPI()
+qna = FastAPI(openapi_url=None, docs_url=None, redoc_url=None)
 
 rooms: Dict[str, Dict[str, Room]] = {}
 
