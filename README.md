@@ -1,4 +1,4 @@
-# qna.janm.ml
+# ws.janm.ml
 
 This is the WebSocket relay server used by qna.
 The qna web app is available on [https://github.com/janmml/qna](https://github.com/janmml/qna)
