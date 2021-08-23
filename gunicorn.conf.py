@@ -1,9 +1,10 @@
+from os import getenv
 import json
 
 # Gunicorn config variables
 loglevel = "info"
 workers = 1
-bind = "0.0.0.0:8000"
+bind = f"0.0.0.0:{getenv('WS_PORT', 80)}"
 errorlog = "-"
 worker_tmp_dir = "/dev/shm"
 accesslog = "-"
