@@ -41,20 +41,20 @@ class Room:
 
 
 # FastAPI setup
-qna = FastAPI(openapi_url=None, docs_url=None, redoc_url=None)
+relay = FastAPI(openapi_url=None, docs_url=None, redoc_url=None)
 
 rooms: Dict[str, Dict[str, Room]] = {}
 
 
 # Health Check
-@qna.get("/healthcheck")
+@relay.get("/healthcheck")
 async def handle_healthcheck():
     # Respond with the current time in milliseconds
     return Response(f"OK {time.time_ns() // (1000 * 1000)}")
 
 
 # Message relaying
-@qna.websocket("/ws/{cohort}/{code}")
+@relay.websocket("/ws/{cohort}/{code}")
 async def handle_socket(websocket: WebSocket, cohort: str, code: str):
     if cohort not in rooms.keys():
         print(f"Creating cohort \"{cohort}\".")
@@ -74,7 +74,8 @@ async def handle_socket(websocket: WebSocket, cohort: str, code: str):
 
         except WebSocketDisconnect:
             print(
-                f"Socket disconnected from room \"{code}\", {len(rooms[cohort][code].sockets) - 1} sockets remaining.")
+                f"Socket disconnected from room \"{code}\", {len(rooms[cohort][code].sockets) - 1} sockets remaining."
+            )
 
             await rooms[cohort][code].remove_socket(websocket)
             if len(rooms[cohort][code].sockets) == 0:
@@ -102,4 +103,4 @@ async def handle_socket(websocket: WebSocket, cohort: str, code: str):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("qna:qna", host="0.0.0.0", port=4000, log_level="info")
+    uvicorn.run("relay:relay", host="0.0.0.0", port=4000, log_level="info")

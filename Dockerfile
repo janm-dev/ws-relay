@@ -15,4 +15,4 @@ HEALTHCHECK --interval=10s --timeout=2s --start-period=5s --retries=3 \
 	CMD curl http://localhost/healthcheck -sf || exit 1
 
 ENTRYPOINT [ "gunicorn", "-k", "uvicorn.workers.UvicornWorker" ]
-CMD [ "qna:qna" ]
+CMD [ "relay:relay" ]
