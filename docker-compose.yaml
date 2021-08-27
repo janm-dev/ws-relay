@@ -1,0 +1,43 @@
+version: "3.9"
+
+networks:
+    ws:
+
+services:
+    # Relay server
+    relay:
+        image: janmml/ws-relay:1.1.0
+        restart: always
+        networks:
+            - ws
+        labels:
+            - traefik.enable=true
+            - traefik.http.routers.relay.rule=Host(`${WS_HOST}`)
+            - traefik.http.routers.relay.entrypoints=wss
+            - traefik.http.routers.relay.tls.certresolver=letsencrypt
+            - traefik.http.routers.relay.tls.domains[0].main=${WS_HOST}
+            - traefik.http.services.relay.loadbalancer.server.port=80
+
+    # Traefik reverse proxy
+    traefik:
+        image: traefik:2.5
+        restart: always
+        ports:
+            - 443:443
+        volumes:
+            - ./certs:/certs
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+        networks:
+            - ws
+        command:
+            - "--log.level=INFO"
+            - "--global.checkNewVersion=true"
+            - "--global.sendAnonymousUsage=false"
+            - "--entrypoints.wss.address=:443"
+            - "--entrypoints.wss.http.tls.certResolver=letsencrypt"
+            - "--entrypoints.wss.http.tls.domains[0].main=${WS_HOST}"
+            - "--providers.docker=true"
+            - "--providers.docker.exposedByDefault=false"
+            - "--certificatesResolvers.letsencrypt.acme.email=${WS_EMAIL}"
+            - "--certificatesResolvers.letsencrypt.acme.tlschallenge=true"
+            - "--certificatesResolvers.letsencrypt.acme.storage=/certs/certs.json"
