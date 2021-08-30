@@ -1,5 +1,6 @@
 # Imports
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Response
+from starlette.types import Message
 from typing import Dict, List
 import asyncio
 import time
@@ -29,12 +30,15 @@ class Room:
 
         self.sockets.clear()
 
-    async def broadcast(self, message: str, sender: WebSocket):
+    async def broadcast(self, message: Message, sender: WebSocket):
         send_queue = []
 
         for socket in self.sockets:
             if socket != sender:
-                send_queue.append(socket.send_text(message))
+                if "text" in message and message["text"] != None:
+                    send_queue.append(socket.send_text(message["text"]))
+                elif "bytes" in message and message["bytes"] != None:
+                    send_queue.append(socket.send_bytes(message["bytes"]))
 
         if len(send_queue) != 0:
             await asyncio.wait(send_queue)
@@ -69,7 +73,10 @@ async def handle_socket(websocket: WebSocket, cohort: str, code: str):
 
     while True:
         try:
-            message = await websocket.receive_text()
+            message = await websocket.receive()
+            if message["type"] != "websocket.receive":
+                raise WebSocketDisconnect(message["code"])
+
             await rooms[cohort][code].broadcast(message, websocket)
 
         except WebSocketDisconnect:
