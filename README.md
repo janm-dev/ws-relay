@@ -1,15 +1,15 @@
-# ws.janm.ml
+# ws.janm.dev
 
 This is the WebSocket relay server used by qna.
 
-The qna web app is available on [https://github.com/janmml/qna](https://github.com/janmml/qna).
+The qna web app is available on [https://github.com/janm-dev/qna](https://github.com/janm-dev/qna).
 
 ## Running locally
 
 ### With Docker
 
 0. Make sure [Docker](https://www.docker.com/) is installed. Start Docker Engine.
-1. Run `docker run -p 4000:80 janmml/ws-relay`. This will download and start the ws-relay Docker container on port 4000. You can check by visiting [http://localhost:4000/healthcheck](http://localhost:4000/healthcheck), which should respond with `OK` and [a number](https://en.wikipedia.org/wiki/Unix_time).
+1. Run `docker run -p 4000:80 janmdev/ws-relay`. This will download and start the ws-relay Docker container on port 4000. You can check by visiting [http://localhost:4000/healthcheck](http://localhost:4000/healthcheck), which should respond with `OK` and [a number](https://en.wikipedia.org/wiki/Unix_time).
 
 ### With Docker (from source)
 

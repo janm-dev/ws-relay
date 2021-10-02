@@ -6,7 +6,7 @@ networks:
 services:
     # Relay server
     relay:
-        image: janmml/ws-relay:1.2.0
+        image: janmdev/ws-relay:1.2.0
         restart: always
         networks:
             - ws
